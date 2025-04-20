@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: car-rental-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: car-rental-app
+  template:
+    metadata:
+      labels:
+        app: car-rental-app
+    spec:
+      containers:
+      - name: car-rental-app
+        image: skuullking/devsecops:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "512Mi"
+          requests:
+            cpu: "0.2"
+            memory: "256Mi"
+        readinessProbe:
+          httpGet:
+            path: /cars/available
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
